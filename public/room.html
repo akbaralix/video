@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Video Chat Xonasi</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -17,12 +17,15 @@
   <body>
     <div class="room-layout">
       <header class="top-bar">
-        <h1 class="room-title">Xona ID: <span id="room-id-display"></span></h1>
-        <div class="room-actions">
-          <button id="copy-link-btn" class="btn secondary small">
-            <i class="fas fa-link"></i> Linkni nusxalash
-          </button>
-        </div>
+        <h1 class="room-title">
+          Xona ID: <span id="room-id-display">...</span>
+        </h1>
+        <button
+          id="copy-link-btn"
+          class="btn btn-secondary btn-small mobile-only"
+        >
+          <i class="fas fa-share-alt"></i>
+        </button>
       </header>
 
       <main class="main-content">
@@ -30,6 +33,7 @@
           <div class="video-container" id="local-video-container">
             <video id="local-video" autoplay muted playsinline></video>
             <div class="video-username" id="local-username-display"></div>
+            <div class="video-overlay" id="local-video-status"></div>
           </div>
         </div>
 
@@ -45,27 +49,30 @@
               placeholder="Xabar yuboring..."
               required
             />
-            <button type="submit" class="btn primary small">
-              <i class="fas fa-paper-plane"></i> Yuborish
+            <button type="submit" class="btn btn-primary btn-small">
+              <i class="fas fa-paper-plane"></i>
             </button>
           </form>
         </div>
       </main>
 
       <footer class="controls-bar">
-        <button id="toggle-video" class="btn control-btn">
-          <i class="fas fa-video"></i> Video
+        <button id="toggle-video" class="btn control-btn active">
+          <i class="fas fa-video"></i>
         </button>
-        <button id="toggle-audio" class="btn control-btn">
-          <i class="fas fa-microphone"></i> Audio
+        <button id="toggle-audio" class="btn control-btn active">
+          <i class="fas fa-microphone"></i>
         </button>
-        <button id="leave-room-btn" class="btn control-btn danger">
-          <i class="fas fa-sign-out-alt"></i> Chiqish
+        <button id="toggle-chat-mobile" class="btn control-btn mobile-only">
+          <i class="fas fa-comment"></i>
+        </button>
+        <button id="leave-room-btn" class="btn control-btn btn-danger">
+          <i class="fas fa-sign-out-alt"></i>
         </button>
       </footer>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js" type="module"></script>
+    <script src="js/script.js" type="module"></script>
   </body>
 </html>

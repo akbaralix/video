@@ -4,51 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Real-Time Video Chat - Kirish</title>
-    <link rel="stylesheet" href=" style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div class="main-container">
-      <header>
-        <h1>📹 Real-Time Video Xona</h1>
-        <p>Node.js, WebRTC va Socket.io yordamida yaratilgan.</p>
+      <header class="app-header">
+        <h1>📹 Video Chat</h1>
+        <p>Do'stlaringiz bilan bir zumda ulaning!</p>
       </header>
 
-      <section class="form-container">
+      <section class="card">
         <h2>Xona Yaratish</h2>
         <form id="create-room-form">
           <div class="input-group">
-            <label for="username">Ismingizni kiriting:</label>
+            <label for="username">Ismingiz:</label>
             <input
               type="text"
               id="username"
-              placeholder="Masalan: Alisher"
+              placeholder="Masalan: Dilshod"
               required
             />
-            <small>Agar bo'sh qoldirsangiz, "Anonim" bo'ladi.</small>
+            <small>Agar bo'sh qoldirsangiz, "Anonim" deb kirasiz.</small>
           </div>
 
-          <button type="submit" class="btn primary">Yangi Xona Yaratish</button>
+          <button type="submit" class="btn btn-primary btn-full-width">
+            Yangi Xona Yaratish
+          </button>
         </form>
 
-        <div id="room-info" class="hidden">
-          <p>Xona muvaffaqiyatli yaratildi!</p>
+        <div id="room-info" class="link-info hidden">
+          <p>Xona tayyor! Linkni do'stingizga yuboring:</p>
           <div class="input-group link-box">
             <input type="text" id="room-link" readonly />
-            <button id="copy-btn" class="btn secondary">Nusxalash</button>
+            <button id="copy-btn" class="btn btn-secondary">
+              <i class="fas fa-copy"></i>
+            </button>
           </div>
-          <a id="join-room-btn" href="#" class="btn primary full-width"
+          <a
+            id="join-room-btn"
+            href="#"
+            class="btn btn-success btn-full-width margin-top-10"
             >Xonaga Kirish</a
           >
         </div>
-
-        <div id="error-message" class="error-box hidden"></div>
       </section>
     </div>
 
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
     <script>
       // Index sahifa mantig'i
       document
@@ -60,15 +69,12 @@
             .getElementById("username")
             .value.trim();
           const username = usernameInput || "Anonim";
-
-          // Foydalanuvchi ismini localStoragega saqlash
           localStorage.setItem("username", username);
 
           try {
-            // Yangi unique xona ID olish uchun serverga so'rov
             const response = await fetch("/create");
             if (response.ok) {
-              const newRoomUrl = response.url; // Express redirect qilgan URL
+              const newRoomUrl = response.url;
 
               document.getElementById("room-link").value = newRoomUrl;
               document.getElementById("join-room-btn").href = newRoomUrl;
@@ -77,44 +83,36 @@
                 .getElementById("create-room-form")
                 .classList.add("hidden");
 
-              // Avtomatik nusxalash
-              navigator.clipboard
-                .writeText(newRoomUrl)
-                .then(() => {
-                  const copyBtn = document.getElementById("copy-btn");
-                  copyBtn.textContent = "Nusxalandi!";
-                  setTimeout(() => (copyBtn.textContent = "Nusxalash"), 3000);
-                })
-                .catch((err) => {
-                  console.error("Nusxalashda xato:", err);
-                });
+              // Linkni avtomatik nusxalash
+              navigator.clipboard.writeText(newRoomUrl).then(() => {
+                const copyBtn = document.getElementById("copy-btn");
+                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(
+                  () => (copyBtn.innerHTML = '<i class="fas fa-copy"></i>'),
+                  3000
+                );
+              });
             } else {
-              throw new Error("Xona yaratishda xato yuz berdi.");
+              alert("Xona yaratishda xato yuz berdi. Server bilan aloqa yo'q.");
             }
           } catch (error) {
-            console.error(error);
-            const errorBox = document.getElementById("error-message");
-            errorBox.textContent =
-              "Xatolik: Server bilan ulanishda muammo. Iltimos, keyinroq urinib ko'ring.";
-            errorBox.classList.remove("hidden");
+            console.error("Xatolik:", error);
+            alert(
+              "Server bilan ulanishda muammo. Loyiha ishga tushirilganiga ishonch hosil qiling."
+            );
           }
         });
 
-      // Nusxalash tugmasi mantig'i
       document.getElementById("copy-btn").addEventListener("click", () => {
         const roomLink = document.getElementById("room-link").value;
-        navigator.clipboard
-          .writeText(roomLink)
-          .then(() => {
-            const copyBtn = document.getElementById("copy-btn");
-            copyBtn.textContent = "Nusxalandi!";
-            setTimeout(() => (copyBtn.textContent = "Nusxalash"), 3000);
-          })
-          .catch((err) => {
-            alert(
-              "Linkni nusxalashda xato yuz berdi. Iltimos, qo'lda nusxalang."
-            );
-          });
+        navigator.clipboard.writeText(roomLink).then(() => {
+          const copyBtn = document.getElementById("copy-btn");
+          copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+          setTimeout(
+            () => (copyBtn.innerHTML = '<i class="fas fa-copy"></i>'),
+            3000
+          );
+        });
       });
     </script>
   </body>
