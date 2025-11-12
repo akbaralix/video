@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Live Chat — Akbarali</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎥 Akbarali Live Chat</h1>
+      <p>Do‘stingiz bilan jonli gaplashing!</p>
+      <button id="createRoom">Xona yaratish</button>
+    </div>
+
+    <script>
+      document.getElementById("createRoom").onclick = () => {
+        const roomId = Math.random().toString(36).substring(2, 8);
+        window.location.href = `/room.html?room=${roomId}`;
+      };
+    </script>
+  </body>
+</html>
