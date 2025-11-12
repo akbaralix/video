@@ -1,47 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Video Chat</title>
+    <title>Real-Time Video Chat - Kirish</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="container">
-      <h1>Video Chat</h1>
-      <p>Oson va tez xonalar yaratish</p>
+    <div class="main-container">
+      <header>
+        <h1>📹 Real-Time Video Xona</h1>
+        <p>Node.js, WebRTC va Socket.io yordamida yaratilgan.</p>
+      </header>
 
-      <input type="text" id="username" placeholder="Ismingizni kiriting" />
-      <button id="createBtn">Xona Yaratish</button>
+      <section class="form-container">
+        <h2>Xona Yaratish</h2>
+        <form id="create-room-form">
+          <div class="input-group">
+            <label for="username">Ismingizni kiriting:</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Masalan: Alisher"
+              required
+            />
+            <small>Agar bo'sh qoldirsangiz, "Anonim" bo'ladi.</small>
+          </div>
 
-      <div class="link-box" id="linkBox" style="display: none">
-        <input type="text" id="roomLink" readonly />
-        <button id="copyBtn">Nusxalash</button>
-      </div>
+          <button type="submit" class="btn primary">Yangi Xona Yaratish</button>
+        </form>
+
+        <div id="room-info" class="hidden">
+          <p>Xona muvaffaqiyatli yaratildi!</p>
+          <div class="input-group link-box">
+            <input type="text" id="room-link" readonly />
+            <button id="copy-btn" class="btn secondary">Nusxalash</button>
+          </div>
+          <a id="join-room-btn" href="#" class="btn primary full-width"
+            >Xonaga Kirish</a
+          >
+        </div>
+
+        <div id="error-message" class="error-box hidden"></div>
+      </section>
     </div>
 
     <script>
-      const createBtn = document.getElementById("createBtn");
-      const usernameInput = document.getElementById("username");
-      const linkBox = document.getElementById("linkBox");
-      const roomLink = document.getElementById("roomLink");
-      const copyBtn = document.getElementById("copyBtn");
+      // Index sahifa mantig'i
+      document
+        .getElementById("create-room-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-      createBtn.onclick = () => {
-        const roomId = Math.random().toString(36).substring(2, 8);
-        const username = usernameInput.value || "Guest";
-        const url = `${window.location.origin}/room.html?room=${roomId}&user=${username}`;
+          const usernameInput = document
+            .getElementById("username")
+            .value.trim();
+          const username = usernameInput || "Anonim";
 
-        roomLink.value = url;
-        linkBox.style.display = "flex";
-      };
+          // Foydalanuvchi ismini localStoragega saqlash
+          localStorage.setItem("username", username);
 
-      copyBtn.onclick = () => {
-        roomLink.select();
-        roomLink.setSelectionRange(0, 99999);
-        document.execCommand("copy");
-        alert("Link nusxalandi!");
-      };
+          try {
+            // Yangi unique xona ID olish uchun serverga so'rov
+            const response = await fetch("/create");
+            if (response.ok) {
+              const newRoomUrl = response.url; // Express redirect qilgan URL
+
+              document.getElementById("room-link").value = newRoomUrl;
+              document.getElementById("join-room-btn").href = newRoomUrl;
+              document.getElementById("room-info").classList.remove("hidden");
+              document
+                .getElementById("create-room-form")
+                .classList.add("hidden");
+
+              // Avtomatik nusxalash
+              navigator.clipboard
+                .writeText(newRoomUrl)
+                .then(() => {
+                  const copyBtn = document.getElementById("copy-btn");
+                  copyBtn.textContent = "Nusxalandi!";
+                  setTimeout(() => (copyBtn.textContent = "Nusxalash"), 3000);
+                })
+                .catch((err) => {
+                  console.error("Nusxalashda xato:", err);
+                });
+            } else {
+              throw new Error("Xona yaratishda xato yuz berdi.");
+            }
+          } catch (error) {
+            console.error(error);
+            const errorBox = document.getElementById("error-message");
+            errorBox.textContent =
+              "Xatolik: Server bilan ulanishda muammo. Iltimos, keyinroq urinib ko'ring.";
+            errorBox.classList.remove("hidden");
+          }
+        });
+
+      // Nusxalash tugmasi mantig'i
+      document.getElementById("copy-btn").addEventListener("click", () => {
+        const roomLink = document.getElementById("room-link").value;
+        navigator.clipboard
+          .writeText(roomLink)
+          .then(() => {
+            const copyBtn = document.getElementById("copy-btn");
+            copyBtn.textContent = "Nusxalandi!";
+            setTimeout(() => (copyBtn.textContent = "Nusxalash"), 3000);
+          })
+          .catch((err) => {
+            alert(
+              "Linkni nusxalashda xato yuz berdi. Iltimos, qo'lda nusxalang."
+            );
+          });
+      });
     </script>
   </body>
 </html>
