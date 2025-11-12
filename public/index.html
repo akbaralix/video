@@ -1,118 +1,40 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Real-Time Video Chat - Kirish</title>
+    <title>Video Chat - Home</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
-    <div class="main-container">
-      <header class="app-header">
-        <h1>📹 Video Chat</h1>
-        <p>Do'stlaringiz bilan bir zumda ulaning!</p>
-      </header>
-
-      <section class="card">
-        <h2>Xona Yaratish</h2>
-        <form id="create-room-form">
-          <div class="input-group">
-            <label for="username">Ismingiz:</label>
-            <input
-              type="text"
-              id="username"
-              placeholder="Masalan: Dilshod"
-              required
-            />
-            <small>Agar bo'sh qoldirsangiz, "Anonim" deb kirasiz.</small>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-full-width">
-            Yangi Xona Yaratish
-          </button>
-        </form>
-
-        <div id="room-info" class="link-info hidden">
-          <p>Xona tayyor! Linkni do'stingizga yuboring:</p>
-          <div class="input-group link-box">
-            <input type="text" id="room-link" readonly />
-            <button id="copy-btn" class="btn btn-secondary">
-              <i class="fas fa-copy"></i>
-            </button>
-          </div>
-          <a
-            id="join-room-btn"
-            href="#"
-            class="btn btn-success btn-full-width margin-top-10"
-            >Xonaga Kirish</a
-          >
-        </div>
-      </section>
+    <div class="container">
+      <h1>Real-time Video Chat</h1>
+      <input
+        type="text"
+        id="username"
+        placeholder="Ismingizni kiriting (optional)"
+      />
+      <button id="createRoom">Yangi Xona Yaratish</button>
+      <input
+        type="text"
+        id="roomIdInput"
+        placeholder="Xona ID bilan qo‘shilish"
+      />
+      <button id="joinRoom">Xonaga Qo‘shilish</button>
     </div>
 
-    <script
-      src="https://kit.fontawesome.com/a076d05399.js"
-      crossorigin="anonymous"
-    ></script>
     <script>
-      // Index sahifa mantig'i
-      document
-        .getElementById("create-room-form")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
+      document.getElementById("createRoom").addEventListener("click", () => {
+        const username = document.getElementById("username").value || "Anonim";
+        const roomId = crypto.randomUUID();
+        window.location.href = `/room/${roomId}?name=${username}`;
+      });
 
-          const usernameInput = document
-            .getElementById("username")
-            .value.trim();
-          const username = usernameInput || "Anonim";
-          localStorage.setItem("username", username);
-
-          try {
-            const response = await fetch("/create");
-            if (response.ok) {
-              const newRoomUrl = response.url;
-
-              document.getElementById("room-link").value = newRoomUrl;
-              document.getElementById("join-room-btn").href = newRoomUrl;
-              document.getElementById("room-info").classList.remove("hidden");
-              document
-                .getElementById("create-room-form")
-                .classList.add("hidden");
-
-              // Linkni avtomatik nusxalash
-              navigator.clipboard.writeText(newRoomUrl).then(() => {
-                const copyBtn = document.getElementById("copy-btn");
-                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-                setTimeout(
-                  () => (copyBtn.innerHTML = '<i class="fas fa-copy"></i>'),
-                  3000
-                );
-              });
-            } else {
-              alert("Xona yaratishda xato yuz berdi. Server bilan aloqa yo'q.");
-            }
-          } catch (error) {
-            console.error("Xatolik:", error);
-            alert(
-              "Server bilan ulanishda muammo. Loyiha ishga tushirilganiga ishonch hosil qiling."
-            );
-          }
-        });
-
-      document.getElementById("copy-btn").addEventListener("click", () => {
-        const roomLink = document.getElementById("room-link").value;
-        navigator.clipboard.writeText(roomLink).then(() => {
-          const copyBtn = document.getElementById("copy-btn");
-          copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-          setTimeout(
-            () => (copyBtn.innerHTML = '<i class="fas fa-copy"></i>'),
-            3000
-          );
-        });
+      document.getElementById("joinRoom").addEventListener("click", () => {
+        const username = document.getElementById("username").value || "Anonim";
+        const roomId = document.getElementById("roomIdInput").value.trim();
+        if (roomId) window.location.href = `/room/${roomId}?name=${username}`;
+        else alert("Xona ID kiriting!");
       });
     </script>
   </body>
