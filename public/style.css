@@ -4,8 +4,67 @@ body {
   background: #0f0f0f;
   color: #fff;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+}
+
+.container h1 {
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.container p {
+  margin-bottom: 20px;
+  color: #aaa;
+}
+
+.container input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #0078ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #005fcc;
+}
+
+.link-box {
+  display: flex;
+  margin-top: 15px;
+  gap: 5px;
+}
+
+.link-box input {
+  flex: 1;
+}
+
+.room-container {
+  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .videos {
@@ -13,13 +72,13 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin: 10px;
+  margin-bottom: 15px;
 }
 
 video {
   width: 300px;
   height: 220px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #222;
 }
 
@@ -28,7 +87,7 @@ video {
   max-width: 600px;
   background: #1a1a1a;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 #messages {
@@ -36,30 +95,17 @@ video {
   overflow-y: auto;
   margin-bottom: 10px;
   border: 1px solid #333;
-  padding: 5px;
-}
-
-input,
-button {
   padding: 10px;
-  margin: 2px 0;
 }
 
-input {
+#chatMessage {
   width: 70%;
+  padding: 10px;
   border-radius: 5px;
   border: none;
 }
 
-button {
+#sendBtn {
   width: 28%;
-  border: none;
-  border-radius: 5px;
-  background: #0078ff;
-  color: #fff;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #005fcc;
+  padding: 10px;
 }

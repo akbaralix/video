@@ -8,20 +8,39 @@
   </head>
   <body>
     <div class="container">
-      <h1>Video Chatga Xush Kelibsiz</h1>
+      <h1>Video Chat</h1>
+      <p>Oson va tez xonalar yaratish</p>
+
       <input type="text" id="username" placeholder="Ismingizni kiriting" />
       <button id="createBtn">Xona Yaratish</button>
+
+      <div class="link-box" id="linkBox" style="display: none">
+        <input type="text" id="roomLink" readonly />
+        <button id="copyBtn">Nusxalash</button>
+      </div>
     </div>
 
     <script>
       const createBtn = document.getElementById("createBtn");
       const usernameInput = document.getElementById("username");
+      const linkBox = document.getElementById("linkBox");
+      const roomLink = document.getElementById("roomLink");
+      const copyBtn = document.getElementById("copyBtn");
 
       createBtn.onclick = () => {
         const roomId = Math.random().toString(36).substring(2, 8);
         const username = usernameInput.value || "Guest";
-        const url = `/room.html?room=${roomId}&user=${username}`;
-        window.location.href = url;
+        const url = `${window.location.origin}/room.html?room=${roomId}&user=${username}`;
+
+        roomLink.value = url;
+        linkBox.style.display = "flex";
+      };
+
+      copyBtn.onclick = () => {
+        roomLink.select();
+        roomLink.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Link nusxalandi!");
       };
     </script>
   </body>

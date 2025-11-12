@@ -1,6 +1,5 @@
 const socket = io();
 
-// URL paramlardan roomId va userId olish
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("room");
 const userId = urlParams.get("user") || "Guest";
@@ -11,7 +10,7 @@ myVideo.muted = true;
 
 let myStream;
 
-// Media olish (kamera + mikrofon)
+// Kamera va mikrofonni olish
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: true })
   .then((stream) => {
@@ -33,9 +32,7 @@ socket.on("user-disconnected", (userId) => {
 // Video qo‘shish funksiyasi
 function addVideoStream(video, stream) {
   video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
-  });
+  video.addEventListener("loadedmetadata", () => video.play());
   videoGrid.append(video);
 }
 
