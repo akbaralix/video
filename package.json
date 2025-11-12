@@ -1,6 +1,7 @@
 {
-  "name": "video-chat",
+  "name": "real-time-video-chat-app",
   "version": "1.0.0",
+  "description": "100% real-time video and audio chat using Node.js, Express, Socket.io, and WebRTC.",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -8,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
   }
 }
