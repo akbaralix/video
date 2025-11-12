@@ -1,160 +1,65 @@
 body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
   background: #0f0f0f;
   color: #fff;
-  font-family: "Poppins", sans-serif;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
 }
 
-.container,
-.room {
-  text-align: center;
-  width: 100%;
-  padding: 0 15px;
-  box-sizing: border-box;
-}
-
-button {
-  background: #0078ff;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s ease;
-}
-
-button:hover {
-  background: #005fcc;
-}
-
-/* --- Video joylashuvi --- */
 .videos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 15px;
-  flex-wrap: wrap; /* Mobil uchun qulay */
+  gap: 10px;
+  margin: 10px;
 }
 
 video {
   width: 300px;
   height: 220px;
+  border-radius: 10px;
   background: #222;
-  border-radius: 12px;
-  object-fit: cover;
 }
 
-/* --- Chat qismi --- */
 .chat {
+  width: 90%;
   max-width: 600px;
-  margin: 0 auto;
   background: #1a1a1a;
-  padding: 15px;
-  border-radius: 10px;
-  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 #messages {
   height: 200px;
   overflow-y: auto;
-  text-align: left;
-  border: 1px solid #333;
-  padding: 10px;
   margin-bottom: 10px;
-  border-radius: 8px;
+  border: 1px solid #333;
+  padding: 5px;
+}
+
+input,
+button {
+  padding: 10px;
+  margin: 2px 0;
 }
 
 input {
   width: 70%;
-  padding: 10px;
   border-radius: 5px;
   border: none;
-  outline: none;
-  font-size: 15px;
-  box-sizing: border-box;
 }
 
-#sendBtn {
-  width: 25%;
-  padding: 10px;
-  font-size: 15px;
+button {
+  width: 28%;
+  border: none;
+  border-radius: 5px;
+  background: #0078ff;
+  color: #fff;
+  cursor: pointer;
 }
 
-/* ===============================
-   📱 MOBILGA MOSLASH (responsive)
-   =============================== */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-    height: auto;
-    padding: 20px 0;
-  }
-
-  .videos {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  video {
-    width: 90%;
-    height: 300px;
-  }
-
-  .chat {
-    width: 95%;
-    padding: 10px;
-  }
-
-  #messages {
-    height: 150px;
-    font-size: 14px;
-  }
-
-  input {
-    width: 65%;
-    font-size: 14px;
-  }
-
-  #sendBtn {
-    width: 30%;
-    font-size: 14px;
-  }
-
-  button {
-    width: 90%;
-    max-width: 250px;
-    font-size: 15px;
-  }
-}
-
-/* 🔹 Juda kichik ekranlar uchun (telefon <480px) */
-@media (max-width: 480px) {
-  h1,
-  h2 {
-    font-size: 20px;
-  }
-
-  video {
-    width: 100%;
-  }
-
-  .chat {
-    width: 100%;
-  }
-
-  input {
-    width: 60%;
-    font-size: 13px;
-  }
-
-  #sendBtn {
-    width: 35%;
-    font-size: 13px;
-  }
+button:hover {
+  background: #005fcc;
 }

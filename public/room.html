@@ -1,23 +1,18 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Live Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="room">
-      <h2>🗣 Jonli aloqa</h2>
-      <div class="videos">
-        <video id="localVideo" autoplay muted playsinline></video>
-        <video id="remoteVideo" autoplay playsinline></video>
-      </div>
+    <div class="videos" id="video-grid"></div>
 
-      <div class="chat">
-        <div id="messages"></div>
-        <input type="text" id="messageInput" placeholder="Xabar yozing..." />
-        <button id="sendBtn">Yuborish</button>
-      </div>
+    <div class="chat">
+      <div id="messages"></div>
+      <input id="chatMessage" placeholder="Xabar yozing..." />
+      <button id="sendBtn">Jo'natish</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>

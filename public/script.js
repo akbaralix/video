@@ -1,68 +1,59 @@
 const socket = io();
-const roomId = new URLSearchParams(window.location.search).get("room");
 
-const localVideo = document.getElementById("localVideo");
-const remoteVideo = document.getElementById("remoteVideo");
+// URL paramlardan roomId va userId olish
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("room");
+const userId = urlParams.get("user") || "Guest";
 
-let localStream;
-let peerConnection;
+const videoGrid = document.getElementById("video-grid");
+const myVideo = document.createElement("video");
+myVideo.muted = true;
 
-const servers = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-};
+let myStream;
 
-// kamera olish
+// Media olish (kamera + mikrofon)
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: true })
   .then((stream) => {
-    localVideo.srcObject = stream;
-    localStream = stream;
-    socket.emit("join-room", roomId);
+    myStream = stream;
+    addVideoStream(myVideo, stream);
+
+    socket.emit("join-room", roomId, userId);
+
+    socket.on("user-connected", (userId) => {
+      console.log("Foydalanuvchi ulandi:", userId);
+    });
+  })
+  .catch((err) => console.error(err));
+
+socket.on("user-disconnected", (userId) => {
+  console.log("Foydalanuvchi chiqdi:", userId);
+});
+
+// Video qo‘shish funksiyasi
+function addVideoStream(video, stream) {
+  video.srcObject = stream;
+  video.addEventListener("loadedmetadata", () => {
+    video.play();
   });
-
-socket.on("user-joined", async () => {
-  peerConnection = new RTCPeerConnection(servers);
-  localStream
-    .getTracks()
-    .forEach((track) => peerConnection.addTrack(track, localStream));
-
-  peerConnection.ontrack = (e) => {
-    remoteVideo.srcObject = e.streams[0];
-  };
-
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-  socket.emit("offer", offer, roomId);
-});
-
-socket.on("offer", async (offer) => {
-  peerConnection = new RTCPeerConnection(servers);
-  localStream
-    .getTracks()
-    .forEach((track) => peerConnection.addTrack(track, localStream));
-
-  peerConnection.ontrack = (e) => {
-    remoteVideo.srcObject = e.streams[0];
-  };
-
-  await peerConnection.setRemoteDescription(offer);
-  const answer = await peerConnection.createAnswer();
-  await peerConnection.setLocalDescription(answer);
-  socket.emit("answer", answer, roomId);
-});
-
-socket.on("answer", (answer) => {
-  peerConnection.setRemoteDescription(answer);
-});
-
-socket.on("candidate", (candidate) => {
-  peerConnection.addIceCandidate(candidate);
-});
-
-function setupIceCandidates() {
-  peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      socket.emit("candidate", event.candidate, roomId);
-    }
-  };
+  videoGrid.append(video);
 }
+
+// Chat funksiyasi
+const messages = document.getElementById("messages");
+const sendBtn = document.getElementById("sendBtn");
+const chatMessage = document.getElementById("chatMessage");
+
+sendBtn.onclick = () => {
+  if (chatMessage.value.trim() !== "") {
+    socket.emit("message", `${userId}: ${chatMessage.value}`);
+    chatMessage.value = "";
+  }
+};
+
+socket.on("createMessage", (message) => {
+  const msg = document.createElement("div");
+  msg.innerText = message;
+  messages.append(msg);
+  messages.scrollTop = messages.scrollHeight;
+});

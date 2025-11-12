@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Live Chat — Akbarali</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Chat</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>🎥 Akbarali Live Chat</h1>
-      <p>Do‘stingiz bilan jonli gaplashing!</p>
-      <button id="createRoom">Xona yaratish</button>
+      <h1>Video Chatga Xush Kelibsiz</h1>
+      <input type="text" id="username" placeholder="Ismingizni kiriting" />
+      <button id="createBtn">Xona Yaratish</button>
     </div>
 
     <script>
-      document.getElementById("createRoom").onclick = () => {
+      const createBtn = document.getElementById("createBtn");
+      const usernameInput = document.getElementById("username");
+
+      createBtn.onclick = () => {
         const roomId = Math.random().toString(36).substring(2, 8);
-        window.location.href = `/room.html?room=${roomId}`;
+        const username = usernameInput.value || "Guest";
+        const url = `/room.html?room=${roomId}&user=${username}`;
+        window.location.href = url;
       };
     </script>
   </body>
